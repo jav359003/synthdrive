@@ -25,8 +25,9 @@ export async function POST(req: NextRequest) {
     const imgBuffer = await imgResponse.arrayBuffer();
     const base64Image = Buffer.from(imgBuffer).toString("base64");
 
-    // Send base64 image to Python detection server instead of URL
-    const response = await fetch("http://localhost:8000/detect", {
+    // Send base64 image to Python detection server
+    const detectionUrl = process.env.DETECTION_SERVER_URL || "http://localhost:8000";
+    const response = await fetch(`${detectionUrl}/detect`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
